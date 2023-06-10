@@ -47,13 +47,10 @@ public class CountryService {
         countryrep.save(country);
         return country;
     }
-    public AddResponse deleteCountry(int id)
+    public void deleteCountry(Country country)
     {
-        countryrep.deleteById(id);
-        AddResponse res = new AddResponse();
-        res.setMsg("Country Deleted");
-        res.setId(id);
-        return res;
+        countryrep.delete(country);
+
     }
     public int getMaxID()
     {

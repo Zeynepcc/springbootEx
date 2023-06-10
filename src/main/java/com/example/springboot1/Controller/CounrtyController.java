@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class CounrtyController {
@@ -72,9 +73,18 @@ public class CounrtyController {
 
     }
     @DeleteMapping("/deletecountry/{id}")
-    public AddResponse deleteCountry(@PathVariable(value = "id") int id )
+    public ResponseEntity<Country> deleteCountry(@PathVariable(value = "id") int id )
     {
-        return  countryService.deleteCountry(id);
+        Country country=null;
+        try {
+            country= countryService.getCountryID(id);
+            countryService.deleteCountry(country);
+        }
+        catch (NoSuchElementException e)
+        {
+            return new ResponseEntity<>(country, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(country, HttpStatus.NOT_FOUND);
     }
 
 }
