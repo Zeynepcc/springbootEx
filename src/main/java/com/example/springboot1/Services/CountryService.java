@@ -1,84 +1,62 @@
 package com.example.springboot1.Services;
 
-import com.example.springboot1.Beans.Country;
+import com.example.springboot1.Entity.Country;
 import com.example.springboot1.Controller.AddResponse;
+import com.example.springboot1.repositories.CountryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Component
+@Service
 public class CountryService {
 
-    static HashMap<Integer, Country> CountryIdMap;
+    @Autowired
+    CountryRepository countryrep;
 
-    public CountryService()
-    {
-        CountryIdMap= new HashMap<Integer,Country>();
-        Country turkeyCountry = new Country(1,"Turkey","Ankara");
-        Country franceCoutry = new Country(2,"France","Paris");
-        Country ukCountry = new Country(3,"UK","London");
-        CountryIdMap.put(1,turkeyCountry);
-        CountryIdMap.put(2,franceCoutry);
-        CountryIdMap.put(3,ukCountry);
 
-    }
-    public List getAllCountries()
+    public List<Country> getAllCountries()
     {
-        List countries = new ArrayList(CountryIdMap.values());
-        return countries;
+        return countryrep.findAll();
     }
     public Country getCountryID(int id)
     {
-        Country country = CountryIdMap.get(id);
-        return country;
+        return countryrep.findById(id).get();
     }
     public Country getCountryByName(String countryname)
     {
+        List<Country> countries=  countryrep.findAll();
         Country country = null;
-        for(int i:CountryIdMap.keySet())
+        for (Country con:countries)
         {
-            if(CountryIdMap.get(i).getCountryname().equals(countryname))
-            {
-                country=CountryIdMap.get(i);
-            }
+            if(con.getCountryname().equalsIgnoreCase(countryname))
+                country=con;
         }
         return country;
     }
     public Country addCountry(Country country)
     {
         country.setId(getMaxID());
-        CountryIdMap.put(country.getId(),country);
+        countryrep.save(country);
         return country;
     }
     public Country updateCountry(Country country)
     {
-        if(country.getId()>0)
-        {
-            CountryIdMap.put(country.getId(),country);
-        }
+        countryrep.save(country);
         return country;
     }
     public AddResponse deleteCountry(int id)
     {
-        CountryIdMap.remove(id);
-        AddResponse res= new AddResponse();
-        res.setMsg("Country is deleted");
+        countryrep.deleteById(id);
+        AddResponse res = new AddResponse();
+        res.setMsg("Country Deleted");
         res.setId(id);
         return res;
-
     }
-    public static int getMaxID()
+    public int getMaxID()
     {
-        int max=0;
-        for(int id:CountryIdMap.keySet())
-        {
-            if(max<=id)
-            {
-                max=id;
-            }
-        }
-        return max+1;
+        return countryrep.findAll().size()+1;
     }
 }

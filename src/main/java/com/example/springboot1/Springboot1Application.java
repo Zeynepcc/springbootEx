@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+//@ComponentScan(basePackageClasses = CountryService.class)
 public class Springboot1Application {
 
 	public static void main(String[] args) {
