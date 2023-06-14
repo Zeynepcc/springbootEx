@@ -92,7 +92,7 @@ public class ServiceMachitoTest {
 
     }
 
-    //cucumber ile bağla users (individual corporate ad soyad) tutan bir table oluştur
+    //cucumber ile bağla users (individual corporate ad soyad) tutan bir table oluştur ci/cd
 
 
 }
